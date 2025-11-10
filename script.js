@@ -92,7 +92,7 @@ function initializeMainPage() {
     initializeDropdowns();
     initializeSliders();
     document.getElementById('generate-btn').addEventListener('click', generateGuide);
-    updateAIMessage("안녕하세요! UNIVASSIST AI Design Assistant입니다. 어떤 프로젝트를 위한 디자인 가이드를 찾으시나요?");
+    updateAIMessage("안녕하세요! TYPOUNIVERSE AI Design Assistant입니다. 어떤 프로젝트를 위한 디자인 가이드를 찾으시나요?");
 }
 
 // 드롭다운 메뉴 초기화
@@ -945,6 +945,10 @@ async function downloadReportAsPDF() {
         // 렌더링 대기
         await new Promise(resolve => setTimeout(resolve, 500));
 
+        // 실제 콘텐츠 너비 측정
+        const actualWidth = Math.max(reportContent.scrollWidth, reportContent.offsetWidth, 1600);
+        console.log('Content width:', reportContent.scrollWidth, reportContent.offsetWidth, 'Using:', actualWidth);
+
         // html2canvas로 고해상도 이미지 생성
         const canvas = await html2canvas(reportContent, {
             scale: 2,
@@ -952,11 +956,13 @@ async function downloadReportAsPDF() {
             allowTaint: false,
             backgroundColor: '#ffffff',
             logging: false,
-            windowWidth: 1400,  // 더 넓게 설정
-            width: reportContent.scrollWidth,
+            windowWidth: actualWidth,
+            width: actualWidth,
             height: reportContent.scrollHeight,
             scrollX: 0,
-            scrollY: 0
+            scrollY: -window.scrollY,
+            x: 0,
+            y: 0
         });
 
         console.log('Canvas size:', canvas.width, 'x', canvas.height);
