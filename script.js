@@ -92,7 +92,7 @@ function initializeMainPage() {
     initializeDropdowns();
     initializeSliders();
     document.getElementById('generate-btn').addEventListener('click', generateGuide);
-    updateAIMessage("안녕하세요! UNIVASSIT AI Design Assistant입니다. 어떤 프로젝트를 위한 디자인 가이드를 찾으시나요?");
+    updateAIMessage("안녕하세요! TYPOUNIVERSE AI Design Assistant입니다. 어떤 프로젝트를 위한 디자인 가이드를 찾으시나요?");
 }
 
 // 드롭다운 메뉴 초기화
@@ -969,11 +969,11 @@ async function downloadReportAsPDF() {
         // A4 크기 (mm)
         const pageWidth = 210;
         const pageHeight = 297;
-        const margin = 10;
+        const margin = 5; // 여백 5mm로 최소화
         
         // 실제 콘텐츠 영역
-        const contentWidth = pageWidth - (margin * 2);
-        const contentHeight = pageHeight - (margin * 2);
+        const contentWidth = pageWidth - (margin * 2); // 200mm
+        const contentHeight = pageHeight - (margin * 2); // 287mm
         
         // 캔버스를 PDF 페이지 너비에 맞춤
         const imgWidth = contentWidth;
@@ -992,6 +992,11 @@ async function downloadReportAsPDF() {
             const pixelsPerPage = (canvas.width * contentHeight) / contentWidth;
             const remainingHeight = canvas.height - yPosition;
             const heightToCapture = Math.min(pixelsPerPage, remainingHeight);
+            
+            // 빈 페이지 방지: 남은 높이가 너무 작으면 스킵
+            if (heightToCapture < 10) {
+                break;
+            }
             
             // 새 캔버스 생성하여 해당 부분만 추출
             const pageCanvas = document.createElement('canvas');
@@ -1014,7 +1019,7 @@ async function downloadReportAsPDF() {
             // 이미지로 변환
             const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.95);
             
-            // PDF에 이미지 추가
+            // PDF에 이미지 추가 (정확한 크기 계산)
             const pageImgHeight = (heightToCapture * contentWidth) / canvas.width;
             pdf.addImage(pageImgData, 'JPEG', margin, margin, imgWidth, pageImgHeight);
             
