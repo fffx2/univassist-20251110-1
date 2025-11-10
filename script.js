@@ -942,21 +942,6 @@ async function downloadReportAsPDF() {
             return;
         }
 
-        // 렌더링 대기
-        await new Promise(resolve => setTimeout(resolve, 500));
-
-        // html2canvas로 이미지 생성
-        const canvas = await html2canvas(reportContent, {
-            scale: 2,
-            useCORS: true,
-            allowTaint: false,
-            backgroundColor: '#ffffff',
-            logging: false,
-            windowWidth: 1200,
-            width: reportContent.scrollWidth,
-            height: reportContent.scrollHeight
-        });
-
         // jsPDF 객체 생성
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF({
@@ -966,68 +951,250 @@ async function downloadReportAsPDF() {
             compress: true
         });
 
-        // A4 크기 (mm)
+        // 페이지 설정
         const pageWidth = 210;
         const pageHeight = 297;
-        const margin = 5; // 여백 5mm로 최소화
-        
-        // 실제 콘텐츠 영역
+        const margin = 15;
         const contentWidth = pageWidth - (margin * 2);
-        const contentHeight = pageHeight - (margin * 2);
-        
-        // 캔버스를 PDF 페이지 너비에 맞춤
-        const imgWidth = contentWidth;
-        const imgHeight = (canvas.height * contentWidth) / canvas.width;
-        
-        // 페이지별로 분할
-        let yPosition = 0; // 캔버스에서의 Y 위치 (픽셀)
-        let pageNumber = 0;
+        let yPosition = margin;
 
-        while (yPosition < canvas.height) {
-            if (pageNumber > 0) {
+        // 폰트 크기 설정
+        const fontSize = {
+            title: 20,
+            heading: 16,
+            subheading: 12,
+            body: 10,
+            small: 8
+        };
+
+        // 새 페이지 체크 함수
+        function checkNewPage(requiredHeight) {
+            if (yPosition + requiredHeight > pageHeight - margin) {
                 pdf.addPage();
+                yPosition = margin;
+                return true;
             }
-            
-            // 한 페이지에 들어갈 캔버스 픽셀 높이 계산
-            const pixelsPerPage = (canvas.width * contentHeight) / contentWidth;
-            const remainingHeight = canvas.height - yPosition;
-            const heightToCapture = Math.min(pixelsPerPage, remainingHeight);
-            
-            // 새 캔버스 생성하여 해당 부분만 추출
-            const pageCanvas = document.createElement('canvas');
-            pageCanvas.width = canvas.width;
-            pageCanvas.height = heightToCapture;
-            
-            const pageCtx = pageCanvas.getContext('2d');
-            pageCtx.fillStyle = '#ffffff';
-            pageCtx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
-            
-            // 원본 캔버스에서 해당 부분 복사
-            pageCtx.drawImage(
-                canvas,
-                0, yPosition,                    // 소스 시작점
-                canvas.width, heightToCapture,   // 소스 크기
-                0, 0,                            // 대상 시작점
-                canvas.width, heightToCapture    // 대상 크기
-            );
-            
-            // 이미지로 변환
-            const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.98);
-            
-            // PDF에 추가 (정확한 비율 계산)
-            const pageImgHeight = (heightToCapture * contentWidth) / canvas.width;
-            pdf.addImage(pageImgData, 'JPEG', margin, margin, imgWidth, pageImgHeight);
-            
-            yPosition += heightToCapture;
-            pageNumber++;
+            return false;
         }
 
-        // 파일명 생성
-        const now = new Date();
-        const dateStr = now.toISOString().split('T')[0];
-        const filename = `UNIVASSIST_Design_Report_${dateStr}.pdf`;
+        // 제목 추가
+        pdf.setFontSize(fontSize.title);
+        pdf.setFont(undefined, 'bold');
+        pdf.text('AI 디자인 시스템 리포트', margin, yPosition);
+        yPosition += 12;
 
-        // PDF 저장
+        // 날짜 추가
+        pdf.setFontSize(fontSize.small);
+        pdf.setFont(undefined, 'normal');
+        const dateStr = new Date().toLocaleDateString('ko-KR');
+        pdf.text(`생성일: ${dateStr}`, margin, yPosition);
+        yPosition += 10;
+
+        // 구분선
+        pdf.setDrawColor(200, 200, 200);
+        pdf.line(margin, yPosition, pageWidth - margin, yPosition);
+        yPosition += 10;
+
+        // ===== 1. AI 폰트 페어링 섹션 =====
+        checkNewPage(40);
+        pdf.setFontSize(fontSize.heading);
+        pdf.setFont(undefined, 'bold');
+        pdf.text('AI 추천 구글 웹폰트 페어링', margin, yPosition);
+        yPosition += 10;
+
+        // Heading Font
+        pdf.setFontSize(fontSize.subheading);
+        pdf.setFont(undefined, 'bold');
+        pdf.text('Heading Font:', margin, yPosition);
+        yPosition += 7;
+        
+        pdf.setFontSize(fontSize.body);
+        pdf.setFont(undefined, 'normal');
+        pdf.text(reportData.fonts.heading, margin + 5, yPosition);
+        yPosition += 7;
+
+        // Body Font
+        pdf.setFontSize(fontSize.subheading);
+        pdf.setFont(undefined, 'bold');
+        pdf.text('Body Font:', margin, yPosition);
+        yPosition += 7;
+        
+        pdf.setFontSize(fontSize.body);
+        pdf.setFont(undefined, 'normal');
+        pdf.text(reportData.fonts.body, margin + 5, yPosition);
+        yPosition += 7;
+
+        // Korean Font
+        pdf.setFontSize(fontSize.subheading);
+        pdf.setFont(undefined, 'bold');
+        pdf.text('Korean Font:', margin, yPosition);
+        yPosition += 7;
+        
+        pdf.setFontSize(fontSize.body);
+        pdf.setFont(undefined, 'normal');
+        pdf.text(reportData.fonts.korean, margin + 5, yPosition);
+        yPosition += 7;
+
+        // AI 추천 이유
+        if (reportData.fonts.reasoning) {
+            checkNewPage(30);
+            pdf.setFontSize(fontSize.subheading);
+            pdf.setFont(undefined, 'bold');
+            pdf.text('AI 추천 이유:', margin, yPosition);
+            yPosition += 7;
+            
+            pdf.setFontSize(fontSize.body);
+            pdf.setFont(undefined, 'normal');
+            const reasonLines = pdf.splitTextToSize(reportData.fonts.reasoning, contentWidth - 5);
+            pdf.text(reasonLines, margin + 5, yPosition);
+            yPosition += reasonLines.length * 5 + 5;
+        }
+
+        yPosition += 10;
+
+        // ===== 2. Primary Color 섹션 =====
+        checkNewPage(50);
+        pdf.setFontSize(fontSize.heading);
+        pdf.setFont(undefined, 'bold');
+        pdf.text('Primary Color System', margin, yPosition);
+        yPosition += 10;
+
+        // Primary 컬러 박스 그리기
+        const colorBoxSize = 15;
+        const colorBoxGap = 3;
+        let xPos = margin;
+        
+        const shades = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'];
+        
+        shades.forEach((shade, index) => {
+            if (index === 5) { // 500 이후 줄바꿈
+                yPosition += colorBoxSize + 15;
+                xPos = margin;
+            }
+            
+            checkNewPage(colorBoxSize + 20);
+            
+            const color = reportData.colors.primary[shade];
+            const rgb = hexToRgb(color);
+            
+            // 컬러 박스
+            pdf.setFillColor(rgb.r, rgb.g, rgb.b);
+            pdf.rect(xPos, yPosition, colorBoxSize, colorBoxSize, 'F');
+            
+            // 테두리
+            pdf.setDrawColor(200, 200, 200);
+            pdf.rect(xPos, yPosition, colorBoxSize, colorBoxSize, 'S');
+            
+            // 라벨
+            pdf.setFontSize(fontSize.small);
+            pdf.setFont(undefined, 'normal');
+            pdf.text(shade, xPos + colorBoxSize/2, yPosition + colorBoxSize + 4, { align: 'center' });
+            pdf.text(color, xPos + colorBoxSize/2, yPosition + colorBoxSize + 8, { align: 'center' });
+            
+            xPos += colorBoxSize + colorBoxGap + 20;
+        });
+
+        yPosition += colorBoxSize + 20;
+
+        // ===== 3. Secondary Color 섹션 =====
+        checkNewPage(50);
+        pdf.setFontSize(fontSize.heading);
+        pdf.setFont(undefined, 'bold');
+        pdf.text('Secondary Color System', margin, yPosition);
+        yPosition += 10;
+
+        xPos = margin;
+        shades.forEach((shade, index) => {
+            if (index === 5) {
+                yPosition += colorBoxSize + 15;
+                xPos = margin;
+            }
+            
+            checkNewPage(colorBoxSize + 20);
+            
+            const color = reportData.colors.secondary[shade];
+            const rgb = hexToRgb(color);
+            
+            pdf.setFillColor(rgb.r, rgb.g, rgb.b);
+            pdf.rect(xPos, yPosition, colorBoxSize, colorBoxSize, 'F');
+            
+            pdf.setDrawColor(200, 200, 200);
+            pdf.rect(xPos, yPosition, colorBoxSize, colorBoxSize, 'S');
+            
+            pdf.setFontSize(fontSize.small);
+            pdf.setFont(undefined, 'normal');
+            pdf.text(shade, xPos + colorBoxSize/2, yPosition + colorBoxSize + 4, { align: 'center' });
+            pdf.text(color, xPos + colorBoxSize/2, yPosition + colorBoxSize + 8, { align: 'center' });
+            
+            xPos += colorBoxSize + colorBoxGap + 20;
+        });
+
+        yPosition += colorBoxSize + 20;
+
+        // ===== 4. 디자인 가이드라인 =====
+        checkNewPage(40);
+        pdf.setFontSize(fontSize.heading);
+        pdf.setFont(undefined, 'bold');
+        pdf.text('디자인 가이드라인', margin, yPosition);
+        yPosition += 10;
+
+        pdf.setFontSize(fontSize.body);
+        pdf.setFont(undefined, 'normal');
+
+        const guidelines = [
+            `서비스 유형: ${reportData.service}`,
+            `플랫폼: ${reportData.platform}`,
+            `키워드: ${reportData.keyword}`,
+            ``,
+            '권장 사용법:',
+            '• Primary 500: 주요 버튼, 링크, 강조 요소',
+            '• Primary 100-300: 배경, 카드, 연한 영역',
+            '• Primary 600-900: 호버 상태, 텍스트',
+            '• Secondary: 보조 버튼, 액센트, 구분 요소'
+        ];
+
+        guidelines.forEach(line => {
+            checkNewPage(7);
+            pdf.text(line, margin, yPosition);
+            yPosition += 6;
+        });
+
+        yPosition += 10;
+
+        // ===== 5. 접근성 정보 =====
+        checkNewPage(30);
+        pdf.setFontSize(fontSize.heading);
+        pdf.setFont(undefined, 'bold');
+        pdf.text('접근성 가이드', margin, yPosition);
+        yPosition += 10;
+
+        pdf.setFontSize(fontSize.body);
+        pdf.setFont(undefined, 'normal');
+
+        const primary500 = reportData.colors.primary['500'];
+        const textColor = getContrastingTextColor(primary500);
+        const contrastRatio = calculateContrast(primary500, textColor).toFixed(2);
+
+        const accessibilityInfo = [
+            `Primary 500 배경: ${primary500}`,
+            `권장 텍스트 색상: ${textColor}`,
+            `명암 대비: ${contrastRatio}:1`,
+            ``,
+            `WCAG 2.1 기준: ${contrastRatio >= 4.5 ? '✓ AA 통과' : '✗ 개선 필요'}`,
+            `대형 텍스트: ${contrastRatio >= 3.0 ? '✓ AA 통과' : '✗ 개선 필요'}`
+        ];
+
+        accessibilityInfo.forEach(line => {
+            checkNewPage(7);
+            pdf.text(line, margin, yPosition);
+            yPosition += 6;
+        });
+
+        // 파일명 생성 및 저장
+        const now = new Date();
+        const dateFileName = now.toISOString().split('T')[0];
+        const filename = `UNIVASSIST_Design_Report_${dateFileName}.pdf`;
+
         pdf.save(filename);
 
         btn.textContent = '✅ PDF 다운로드 완료!';
