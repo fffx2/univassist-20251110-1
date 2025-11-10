@@ -952,10 +952,12 @@ async function downloadReportAsPDF() {
             allowTaint: false,
             backgroundColor: '#ffffff',
             logging: false,
-            windowWidth: 1200,
+            windowWidth: 1280,
             width: reportContent.scrollWidth,
             height: reportContent.scrollHeight
         });
+
+        console.log('Canvas size:', canvas.width, 'x', canvas.height);
 
         // jsPDF 객체 생성
         const { jsPDF } = window.jspdf;
@@ -969,7 +971,7 @@ async function downloadReportAsPDF() {
         // A4 크기 (mm)
         const pageWidth = 210;
         const pageHeight = 297;
-        const margin = 5; // 여백 5mm로 최소화
+        const margin = 5;
         
         // 실제 콘텐츠 영역
         const contentWidth = pageWidth - (margin * 2); // 200mm
@@ -977,31 +979,33 @@ async function downloadReportAsPDF() {
         
         // 캔버스를 PDF 페이지 너비에 맞춤
         const imgWidth = contentWidth;
-        const imgHeight = (canvas.height * contentWidth) / canvas.width;
         
         // 페이지별로 분할
         let yPosition = 0;
         let pageNumber = 0;
+        const pixelsPerPage = (canvas.width * contentHeight) / contentWidth;
+
+        console.log('Pixels per page:', pixelsPerPage);
 
         while (yPosition < canvas.height) {
-            if (pageNumber > 0) {
-                pdf.addPage();
-            }
-            
-            // 한 페이지에 들어갈 캔버스 픽셀 높이 계산
-            const pixelsPerPage = (canvas.width * contentHeight) / contentWidth;
             const remainingHeight = canvas.height - yPosition;
             const heightToCapture = Math.min(pixelsPerPage, remainingHeight);
             
-            // 빈 페이지 방지: 남은 높이가 너무 작으면 스킵
-            if (heightToCapture < 10) {
+            // 빈 페이지 방지: 남은 높이가 한 페이지의 10% 미만이면 무시
+            const minHeight = pixelsPerPage * 0.1;
+            if (heightToCapture < minHeight) {
+                console.log('Skipping small remaining height:', heightToCapture);
                 break;
+            }
+            
+            if (pageNumber > 0) {
+                pdf.addPage();
             }
             
             // 새 캔버스 생성하여 해당 부분만 추출
             const pageCanvas = document.createElement('canvas');
             pageCanvas.width = canvas.width;
-            pageCanvas.height = heightToCapture;
+            pageCanvas.height = Math.ceil(heightToCapture);
             
             const pageCtx = pageCanvas.getContext('2d');
             pageCtx.fillStyle = '#ffffff';
@@ -1023,9 +1027,13 @@ async function downloadReportAsPDF() {
             const pageImgHeight = (heightToCapture * contentWidth) / canvas.width;
             pdf.addImage(pageImgData, 'JPEG', margin, margin, imgWidth, pageImgHeight);
             
+            console.log(`Page ${pageNumber + 1}: y=${yPosition}, height=${heightToCapture}, pdfHeight=${pageImgHeight}mm`);
+            
             yPosition += heightToCapture;
             pageNumber++;
         }
+
+        console.log('Total pages:', pageNumber);
 
         // 파일명 생성
         const now = new Date();
