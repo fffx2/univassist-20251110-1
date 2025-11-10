@@ -1148,6 +1148,42 @@ function downloadReportAsJSON() {
     URL.revokeObjectURL(url);
 }
 
+// DOCX 다운로드 함수 추가 (Netlify Function 사용)
+async function downloadReportAsDOCX() {
+    if (!reportData) {
+        alert('리포트 데이터가 없습니다.\n먼저 1번 탭에서 "AI 가이드 생성하기"를 실행해주세요.');
+        return;
+    }
+
+    try {
+        // Netlify Function 호출
+        const response = await fetch('/.netlify/functions/generate-docx', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(reportData)
+        });
+
+        if (!response.ok) {
+            throw new Error('DOCX 생성 실패');
+        }
+
+        // DOCX 파일 다운로드
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `UNIVASSIST_Design_Report_${new Date().toISOString().split('T')[0]}.docx`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+    } catch (error) {
+        console.error('DOCX 다운로드 오류:', error);
+        alert('DOCX 파일 생성 중 오류가 발생했습니다.\n\n' + error.message);
+    }
+}
+
 // ============================================
 // AI 메시지 타이핑 효과
 // ============================================

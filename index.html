@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UNIVASSIST</title>
+    <title>TYPOUNIVERSE</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
     <link rel="stylesheet" href="./styles.css">
 </head>
@@ -411,16 +411,16 @@
                     <!-- PDF Download -->
                     <section class="report-section">
                         <h2 class="report-section-title">AI 리포트 다운로드</h2>
-                        <div style="display: flex; gap: 10px; margin-top: 10px;">
-                            <button id="download-report-btn" onclick="downloadReportAsPDF()" style="flex: 1; padding: 16px 32px; font-size: 16px; font-weight: 600; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s;">
-                                📑 PDF로 다운로드
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                            <button onclick="downloadReportAsDOCX()" style="padding: 16px 32px; font-size: 16px; font-weight: 600; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s;">
+                                📄 WORD로 다운로드
                             </button>
-                            <button onclick="downloadReportAsJSON()" style="flex: 1; padding: 16px 32px; font-size: 16px; font-weight: 600; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s;">
-                                💾 JSON으로 다운로드
+                            <button id="download-report-btn" onclick="downloadReportAsPDF()" style="padding: 16px 32px; font-size: 16px; font-weight: 600; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s;">
+                                📑 PDF로 다운로드
                             </button>
                         </div>
                         <p style="margin-top: 10px; font-size: 12px; color: #6b7280;">
-                            💡 JSON 파일은 모든 데이터를 편집 가능한 형식으로 저장합니다.
+                            💡 WORD 파일은 텍스트 편집이 가능하며, PDF는 간단한 보기용입니다.
                         </p>
                     </section>
 
