@@ -952,9 +952,11 @@ async function downloadReportAsPDF() {
             allowTaint: false,
             backgroundColor: '#ffffff',
             logging: false,
-            windowWidth: 1280,
+            windowWidth: 1400,  // 더 넓게 설정
             width: reportContent.scrollWidth,
-            height: reportContent.scrollHeight
+            height: reportContent.scrollHeight,
+            scrollX: 0,
+            scrollY: 0
         });
 
         console.log('Canvas size:', canvas.width, 'x', canvas.height);
