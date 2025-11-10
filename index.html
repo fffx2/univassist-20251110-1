@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TYPOUNIVERSE</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- ============================================
+             헤더 네비게이션
+             - 3개 탭: 메인 / 유니버설 컬러시스템 / AI 리포트
+        ============================================ -->
+        <header class="header">
+            <div class="header-left">
+                <a href="#" class="nav-link active" data-target="main-page">컬러시스템 설계</a>
+                <a href="#" class="nav-link" data-target="lab-page">유니버설 컬러시스템 실험실</a>
+                <a href="#" class="nav-link" data-target="report-page">AI 디자인 리포트</a>
+            </div>
+            <div class="header-right">
+                <span class="typouniverse-logo">UNIVASSIST</span>
+            </div>
+        </header>
+
+        <!-- ============================================
+             첫 번째 탭: 메인 페이지 (AI 가이드 생성)
+        ============================================ -->
+        <div id="main-page" class="main-page active">
+            <div class="main-content">
+                <div class="left-section">
+                    <!-- STEP 01: 서비스 목적 및 플랫폼 선택 -->
+                    <div class="step-section" id="step01">
+                        <h2 class="step-title">STEP 01.</h2>
+                        <h3 class="section-header">서비스 목적 및 OS/플랫폼 선택</h3>
+                        <div class="dropdown-section">
+                            <div class="dropdown-wrapper" style="position: relative;">
+                                <div class="dropdown-item" id="service-dropdown">
+                                    <span id="service-text">서비스목적</span>
+                                    <span class="dropdown-arrow">▼</span>
+                                </div>
+                                <div class="dropdown-menu" id="service-menu"></div>
+                            </div>
+                            <div class="dropdown-wrapper" style="position: relative;">
+                                <div class="dropdown-item" id="platform-dropdown">
+                                    <span id="platform-text">OS/플랫폼</span>
+                                    <span class="dropdown-arrow">▼</span>
+                                </div>
+                                <div class="dropdown-menu" id="platform-menu"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 02: 서비스 무드 선택 -->
+                    <div class="step-section hidden" id="step02">
+                        <h2 class="step-title">STEP 02.</h2>
+                        <h3 class="section-header">서비스 무드</h3>
+                        <div class="tone-selector">
+                            <div class="tone-labels">
+                                <span>SOFT</span>
+                                <span>HARD</span>
+                            </div>
+                            <div class="slider-container">
+                                <input type="range" class="slider" id="soft-hard-slider" min="0" max="100" value="50">
+                            </div>
+                            <div class="tone-bottom-labels">
+                                <span>STATIC</span>
+                                <span>DYNAMIC</span>
+                            </div>
+                            <div class="slider-container">
+                                <input type="range" class="slider" id="static-dynamic-slider" min="0" max="100" value="50">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 03: 핵심 키워드 및 색상 선택 -->
+                    <div class="step-section hidden" id="step03">
+                        <h2 class="step-title">STEP 03.</h2>
+                        <h3 class="section-header">핵심 키워드</h3>
+                        <div class="keyword-tags" id="keyword-tags"></div>
+                        <div style="margin-top: 30px; display: none;" id="color-selection-wrapper">
+                            <h4 style="font-size: 14px; margin-bottom: 15px;">주조 색상 선택</h4>
+                            <div class="color-selection" id="color-selection"></div>
+                        </div>
+                        <button class="generate-btn hidden" id="generate-btn">AI 가이드 생성하기</button>
+                    </div>
+                </div>
+
+                <!-- AI Assistant 결과 섹션 -->
+                <div class="right-section">
+                    <div class="step-section">
+                        <h2 class="step-title">AI Assistant.</h2>
+                        <h3 class="section-header">핵심 키워드 기반 컬러시스템 추천</h3>
+                        <div class="guide-description" id="ai-message"></div>
+                        
+                        <!-- AI 생성 결과: Color System만 표시 -->
+                        <div id="ai-report" style="display: none;">
+                            <div class="color-system-section">
+                                <h4 class="subsection-title">#Color system</h4>
+                                <div class="color-palette">
+                                    <div class="color-row">
+                                        <div class="color-box" id="primary-main"><div class="color-label">Primary color</div><div class="color-code"></div></div>
+                                        <div class="color-box" id="secondary-main"><div class="color-label">Secondary color</div><div class="color-code"></div></div>
+                                    </div>
+                                    <div class="color-row">
+                                        <div class="color-box" id="primary-light"><div class="color-label">P_Light</div><div class="color-code"></div></div>
+                                        <div class="color-box" id="secondary-light"><div class="color-label">S_Light</div><div class="color-code"></div></div>
+                                    </div>
+                                    <div class="color-row">
+                                        <div class="color-box" id="primary-dark"><div class="color-label">P_Dark</div><div class="color-code"></div></div>
+                                        <div class="color-box" id="secondary-dark"><div class="color-label">S_Dark</div><div class="color-code"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 유니버설 컬러시스템 실험실 바로가기 버튼 -->
+                            <a href="#" class="interactive-button" data-target="lab-page">유니버설 컬러시스템 실험실 바로가기</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 하단 가이드라인 -->
+            <div class="bottom-guidelines" id="guidelines" style="display: none;">
+                <div class="guideline-item">
+                    <h4 class="guideline-title">명도 대비의 중요성과 기준 WCAG 2.1</h4>
+                    <p class="guideline-text">웹 접근성은 모든 사용자가 장애 여부와 관계없이 웹 콘텐츠에 동등하게 접근하고 상호작용할 수 있도록 보장하는 것을 목표로 한다. 이러한 접근성을 달성하기 위한 핵심적인 요소 중 하나는 바로 텍스트 콘텐츠의 명도 대비(Contrast)이다. W3C이 제정한 웹 콘텐츠 접근성 지침(Web Content Accessibility Guidelines, WCAG) 2.1의 성공 기준 1.4.3 '명도 대비(최소)'는 텍스트 가독성 확보를 위한 구체적인 지침을 제시한다.</p>
+                </div>
+                <div class="guideline-item">
+                    <h4 class="guideline-title">색각 이상자를 고려한 색상 설계</h4>
+                    <p class="guideline-text">색상은 정보를 시각적으로 강화하는 효과적인 수단이지만, 색상에만 의존하는 정보 전달 방식은 색각 이상자에게 장벽이 될 수 있다. 적색과 녹색을 구분하기 어려운 적록색약, 색맹이 가장 흔한 유형이다.</p>
+                </div>
+                <div class="guideline-item">
+                    <h4 class="guideline-title">모든 사용자를 위한 보편적인 디자인</h4>
+                    <p class="guideline-text">텍스트와 배경 간의 명도 대비를 최소 4.5:1 이상으로 확보하면, 사용자가 색상을 구분하지 못하더라도 밝기 차이를 통해 콘텐츠를 충분히 인식할 수 있다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ============================================
+             두 번째 탭: 유니버설 컬러시스템 실험실
+        ============================================ -->
+        <div id="lab-page" class="lab-page hidden">
+            <div class="main-content">
+                
+                <!-- 명도 대비 실시간 테스트 -->
+                <div class="contrast-test">
+                    <h2 class="section-header-lab">텍스트-배경 명도 대비 실시간 테스트</h2>
+                    <div class="color-inputs">
+                        <div class="input-group">
+                            <label>Background color</label>
+                            <div class="color-input-wrapper">
+                                <input type="text" class="color-input" id="bg-color-input" value="#F5F5F5">
+                                <input type="color" class="color-picker" id="bg-color-picker" value="#F5F5F5">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Text color</label>
+                            <div class="color-input-wrapper">
+                                <input type="text" class="color-input" id="text-color-input" value="#333333">
+                                <input type="color" class="color-picker" id="text-color-picker" value="#333333">
+                            </div>
+                        </div>
+                         <div class="input-group">
+                            <label>Line height</label>
+                            <div class="slider-container lab-slider">
+                                <input type="range" class="slider" min="1" max="2.5" step="0.1" value="1.6" id="line-height-input">
+                                <div style="text-align: center; margin-top: 5px;"><span id="line-height-value">1.6</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contrast-display">
+                        <div class="contrast-ratio-wrapper">
+                            <div style="font-size: 12px; color: #666; margin-bottom: 5px;">텍스트-배경 명도대비</div>
+                            <div class="contrast-ratio" id="contrast-ratio">12.36 : 1</div>
+                        </div>
+                        <div class="contrast-status-wrapper">
+                            <div class="contrast-status">
+                                <span class="status-badge pass" id="aa-status">AA</span>
+                                <span class="status-badge pass" id="aaa-status">AAA</span>
+                            </div>
+                            <p class="contrast-info" id="contrast-info">WCAG 2.1 기준, 일반 텍스트는 4.5:1(AA), 7:1(AAA) 이상이어야 합니다.<br>기준 통과시 초록색, 기준 미달시 빨간색으로 표시됩니다.</p>
+                        </div>
+                    </div>
+                    <div class="text-preview" id="text-preview">
+                        <div class="preview-text-1">일반 텍스트의 명도 대비는 최소 4.5:1 이상을 권장합니다.</div>
+                        <div class="preview-text-2">대형 텍스트는 일반 글자 18pt(24px) 이상</div>
+                        <div class="preview-text-3">굵은 글자 14pt(18.5px) 이상일 경우 배경과의 명도 대비를 3:1까지 낮출 수 있습니다.</div>
+                    </div>
+                </div>
+                
+                <!-- 색약자 시뮬레이터 -->
+                <div class="universal-color-system">
+                    <h2 class="section-header-lab">모든 사용자를 위한 유니버설 컬러 시스템</h2>
+                    <div class="simulator-display">
+                        <div class="simulator-card">
+                            <div class="simulator-title">일반 시각</div>
+                            <div class="color-palette-sim">
+                                <div class="palette-item" id="origBg"><span class="palette-label">주조색상</span><span class="hex-code-sim"></span></div>
+                                <div class="palette-item" id="origText"><span class="palette-label">보조색상</span><span class="hex-code-sim"></span></div>
+                            </div>
+                            <div class="contrast-example-box" id="orig-contrast-example">
+                                <p>배경-텍스트 명도대비 예시입니다.</p>
+                                <span class="ratio-display"></span>
+                            </div>
+                        </div>
+                        <div class="simulator-card">
+                            <div class="simulator-title">적록색약 시각</div>
+                            <div class="color-palette-sim">
+                                <div class="palette-item" id="simBg"><span class="palette-label">주조색상</span><span class="hex-code-sim"></span></div>
+                                <div class="palette-item" id="simText"><span class="palette-label">보조색상</span><span class="hex-code-sim"></span></div>
+                            </div>
+                            <div class="contrast-example-box" id="sim-contrast-example">
+                                <p>배경-텍스트 명도대비 예시입니다.</p>
+                                <span class="ratio-display"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="solutions-section">
+                        <div class="solution-header">AI 접근성 솔루션</div>
+                        <div id="solution-text"></div>
+                    </div>
+                </div>
+
+                <!-- 플랫폼별 폰트 단위 비교 (pt 기준으로 변경) -->
+                <div class="bottom-font-units">
+                    <h2 class="section-header-lab">플랫폼별 폰트 단위 비교</h2>
+                    <div class="font-size-input-wrapper">
+                        <label for="font-size-input-pt">Font size</label>
+                        <input type="number" id="font-size-input-pt" value="12" step="0.5">
+                        <span>pt (기준)</span>
+                    </div>
+                    <div class="font-unit-guide">
+                        💡 <strong>단위 이해하기:</strong> pt는 포인트로 인쇄 및 디자인에서 사용되는 절대 단위입니다. 웹에서는 rem, iOS는 pt, Android는 sp를 사용하며, 각각의 플랫폼에 최적화된 단위로 변환됩니다.
+                    </div>
+                    <div class="font-unit-cards">
+                        <div class="font-unit-card">
+                            <h4>px (for Web)</h4>
+                            <p class="font-example" id="px-example">16.0px</p>
+                            <p class="font-unit-desc">웹 브라우저의 기본 단위</p>
+                        </div>
+                        <div class="font-unit-card">
+                            <h4>rem (for Web)</h4>
+                            <p class="font-example" id="rem-example">1.00rem</p>
+                            <p class="font-unit-desc">반응형 디자인의 핵심, 루트 기준 상대값</p>
+                        </div>
+                        <div class="font-unit-card">
+                            <h4>sp (for Android)</h4>
+                            <p class="font-example" id="sp-example">16sp</p>
+                            <p class="font-unit-desc">사용자 설정 반영, 접근성 향상</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI 디자인 리포트 바로가기 버튼 -->
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="#" class="interactive-button" data-target="report-page" id="go-to-report-btn">AI 디자인 리포트 바로가기</a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ============================================
+             세 번째 탭: AI Design Report
+        ============================================ -->
+        <div id="report-page" class="report-page hidden">
+            <div class="report-content">
+                <div class="report-hero">
+                    <h1 class="report-title-small">AI Design Report</h1>
+                    <p class="report-subtitle">지금까지 설계한 모든 내용을 토대로 디자인 리포트를 정리해드릴게요.</p>
+                </div>
+
+                <div id="report-loading" class="report-loading">
+                    <div class="loading-spinner"></div>
+                    <p>AI가 당신의 디자인 시스템을 분석하고 있습니다...</p>
+                </div>
+
+                <div id="report-content" style="display: none;">
+                    <!-- Font Pairing Section (한글 폰트 포함) -->
+                    <section class="report-section">
+                        <h2 class="report-section-title">AI 추천 구글 웹폰트 페어링</h2>
+                        <div class="font-pairing-grid">
+                            <div class="font-card">
+                                <div class="font-preview" id="heading-font-preview">Heading Font</div>
+                                <h4 class="font-name" id="heading-font-name">-</h4>
+                                <p class="font-usage">제목, 헤더, 강조 텍스트</p>
+                                <a href="#" class="font-link" id="heading-font-link" target="_blank">Google Fonts에서 보기 →</a>
+                            </div>
+                            <div class="font-card">
+                                <div class="font-preview" id="body-font-preview">Body Font</div>
+                                <h4 class="font-name" id="body-font-name">-</h4>
+                                <p class="font-usage">본문, 단락, 일반 텍스트</p>
+                                <a href="#" class="font-link" id="body-font-link" target="_blank">Google Fonts에서 보기 →</a>
+                            </div>
+                            <div class="font-card">
+                                <div class="font-preview korean" id="korean-font-preview">한글 폰트</div>
+                                <h4 class="font-name" id="korean-font-name">-</h4>
+                                <p class="font-usage">한글 제목 및 본문</p>
+                                <a href="#" class="font-link" id="korean-font-link" target="_blank">Google Fonts에서 보기 →</a>
+                            </div>
+                        </div>
+                        <div class="ai-reasoning">
+                            <strong>AI 추천 이유:</strong>
+                            <p id="font-reasoning">-</p>
+                        </div>
+                    </section>
+
+                    <!-- Typography Section (메인에서 이동) -->
+                    <section class="report-section">
+                        <h2 class="report-section-title">접근성을 고려한 플랫폼별 타이포그래피 가이드</h2>
+                        <div class="typography-report-content">
+                            <div class="font-description">
+                                <p><strong>명도대비</strong></p>
+                                <p id="contrast-description-report"></p>
+                            </div>
+                            <div class="font-specs">
+                                <p><strong>사이즈</strong></p>
+                                <div id="font-size-description-report"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Complete Color System -->
+                    <section class="report-section">
+                        <h2 class="report-section-title"> 주조/보조 컬러시스템 사용 가이드</h2>
+                        <div class="color-shades-grid">
+                            <div class="shade-column">
+                                <h4>Primary Shades</h4>
+                                <div id="primary-shades"></div>
+                            </div>
+                            <div class="shade-column">
+                                <h4>Secondary Shades</h4>
+                                <div id="secondary-shades"></div>
+                            </div>
+                        </div>
+                        <div class="color-usage-guide">
+                            <h4>색상 사용 가이드</h4>
+                            <ul id="color-usage-list"></ul>
+                        </div>
+                    </section>
+
+                    <!-- NEW: 유니버설 컬러시스템 섹션 -->
+                    <section class="report-section">
+                        <h2 class="report-section-title"> 유니버설 컬러시스템 최적화</h2>
+                        <p style="font-size: 14px; color: #666; margin-bottom: 25px;">
+                            두 번째 탭에서 설정한 색상을 기반으로 일반 시각과 색각 이상자 시각에서 최적의 조합을 추천합니다.
+                        </p>
+                        <div class="universal-recommendation-grid">
+                            <div class="recommendation-card">
+                                <h4>일반 시각 최적 조합</h4>
+                                <div class="optimal-colors">
+                                    <div class="optimal-color-box" id="normal-bg-optimal">
+                                        <span class="optimal-label">배경색</span>
+                                        <span class="optimal-hex"></span>
+                                    </div>
+                                    <div class="optimal-color-box" id="normal-text-optimal">
+                                        <span class="optimal-label">텍스트색</span>
+                                        <span class="optimal-hex"></span>
+                                    </div>
+                                </div>
+                                <div class="optimal-preview" id="normal-preview">
+                                    <p>최적화된 명도 대비 예시입니다.</p>
+                                    <span class="optimal-ratio"></span>
+                                </div>
+                            </div>
+                            <div class="recommendation-card">
+                                <h4>색각 이상자 시각 최적 조합</h4>
+                                <div class="optimal-colors">
+                                    <div class="optimal-color-box" id="colorblind-bg-optimal">
+                                        <span class="optimal-label">배경색</span>
+                                        <span class="optimal-hex"></span>
+                                    </div>
+                                    <div class="optimal-color-box" id="colorblind-text-optimal">
+                                        <span class="optimal-label">텍스트색</span>
+                                        <span class="optimal-hex"></span>
+                                    </div>
+                                </div>
+                                <div class="optimal-preview" id="colorblind-preview">
+                                    <p>최적화된 명도 대비 예시입니다.</p>
+                                    <span class="optimal-ratio"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ai-reasoning" style="margin-top: 25px;">
+                            <strong>AI 추천 이유:</strong>
+                            <p id="universal-reasoning">-</p>
+                        </div>
+                    </section>
+
+                    <!-- Component Preview -->
+                    <section class="report-section">
+                        <h2 class="report-section-title">컴포넌트 미리보기</h2>
+                        <div class="component-showcase" id="component-showcase"></div>
+                    </section>
+
+                    <!-- Code Export -->
+                    <section class="report-section">
+                        <h2 class="report-section-title">디자인 시스템 내보내기</h2>
+                        <div class="code-export-tabs">
+                            <button class="export-tab active" data-tab="css">CSS Variables</button>
+                            <button class="export-tab" data-tab="tailwind">Tailwind Config</button>
+                            <button class="export-tab" data-tab="scss">SCSS Variables</button>
+                        </div>
+                        <div class="code-container">
+                            <pre id="code-output">/* Your design system code will appear here */</pre>
+                            <button class="copy-code-btn" id="copy-code-btn">📋 Copy to Clipboard</button>
+                        </div>
+                    </section>
+
+                    <!-- PDF Download -->
+                    <section class="report-section">
+                        <h2 class="report-section-title">AI 리포트 다운로드</h2>
+                        <button id="download-report-btn" onclick="downloadReportAsPDF()" style="width: 100%; padding: 16px 32px; font-size: 16px; font-weight: 600; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s; margin-top: 10px;">
+                            📑 PDF로 다운로드
+                        </button>
+                    </section>
+
+                    <!-- AI Accessibility Analysis 섹션 삭제됨 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- PDF 생성 라이브러리 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="./script.js"></script>
+</body>
+</html>

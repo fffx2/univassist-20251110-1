@@ -1,0 +1,202 @@
+{
+  "guidelines": {
+    "ios": {
+      "source": "Apple Human Interface Guidelines",
+      "font": {
+        "family": "SF Pro Display",
+        "unit": "pt",
+        "keyFeature": "Dynamic Type"
+      },
+      "typeScale": {
+        "body": "17pt",
+        "bodyMin": "12pt",
+        "headline": "17pt (Semi-Bold)",
+        "largeTitle": "34pt"
+      },
+      "defaultSize": "17pt",
+      "minimumSize": "12pt",
+      "lineHeight": "1.6",
+      "contrast": "WCAG 2.1 AA (4.5:1) 기준을 엄격히 준수",
+      "description": "iOS는 Dynamic Type을 통해 사용자가 시스템 전체 폰트 크기를 조절할 수 있으며, 17pt를 표준 본문 크기로 사용합니다."
+    },
+    "android": {
+      "source": "Google Material Design 3",
+      "font": {
+        "family": "Roboto",
+        "unit": "sp",
+        "keyFeature": "Scale-independent Pixels"
+      },
+      "typeScale": {
+        "body": "16sp",
+        "bodyMin": "12sp",
+        "headline": "34sp",
+        "button": "14sp"
+      },
+      "defaultSize": "16sp",
+      "minimumSize": "12sp",
+      "lineHeight": "1.5",
+      "contrast": "WCAG 2.1 AA (4.5:1) 기준",
+      "description": "Android는 sp 단위로 사용자의 시스템 폰트 크기 설정을 존중하며, Material Design 3에서 16sp를 표준으로 합니다."
+    },
+    "web": {
+      "source": "W3C Web Standards & MDN",
+      "font": {
+        "family": "Inter",
+        "unit": "rem",
+        "keyFeature": "Responsive Design"
+      },
+      "typeScale": {
+        "body": "1rem (16px)",
+        "bodyMin": "0.875rem (14px)",
+        "h1": "2.5rem",
+        "h2": "2rem"
+      },
+      "defaultSize": "16px (1rem)",
+      "minimumSize": "14px",
+      "lineHeight": "1.6",
+      "contrast": "WCAG 2.1 AA (4.5:1) 기준",
+      "description": "웹은 rem 단위로 반응형 디자인을 구현하며, 브라우저 기본값 16px를 1rem의 기준으로 사용합니다."
+    },
+    "desktop": {
+      "source": "Microsoft Fluent Design",
+      "font": {
+        "family": "Segoe UI",
+        "unit": "epx",
+        "keyFeature": "Effective Pixels (DPI-aware)"
+      },
+      "typeScale": {
+        "body": "14px",
+        "bodyMin": "12px",
+        "title": "24px",
+        "subtitle": "20px"
+      },
+      "defaultSize": "14px",
+      "minimumSize": "12px",
+      "lineHeight": "1.5",
+      "contrast": "WCAG 2.1 AA (4.5:1) 기준",
+      "description": "Windows는 Effective Pixels로 DPI에 관계없이 일관된 크기를 제공하며, 14px를 표준으로 합니다."
+    },
+    "tablet": {
+      "source": "iPadOS & Android Tablet Guidelines",
+      "font": {
+        "family": "SF Pro Display / Roboto",
+        "unit": "pt / sp",
+        "keyFeature": "Adaptive Layouts"
+      },
+      "typeScale": {
+        "body": "17pt / 16sp",
+        "bodyMin": "13pt / 12sp",
+        "headline": "28pt / 28sp",
+        "title": "22pt / 22sp"
+      },
+      "defaultSize": "17pt (iOS) / 16sp (Android)",
+      "minimumSize": "13pt (iOS) / 12sp (Android)",
+      "lineHeight": "1.6",
+      "contrast": "WCAG 2.1 AA (4.5:1) 기준",
+      "description": "태블릿은 큰 화면을 고려하여 모바일보다 약간 큰 폰트를 사용하며, 멀티태스킹 환경을 지원합니다."
+    },
+    "wearable": {
+      "source": "Apple watchOS & Google Wear OS",
+      "font": {
+        "family": "SF Compact / Roboto",
+        "unit": "pt / sp",
+        "keyFeature": "Glanceable Information"
+      },
+      "typeScale": {
+        "body": "16pt / 15sp",
+        "bodyMin": "13pt / 12sp",
+        "headline": "20pt / 20sp",
+        "caption": "13pt / 12sp"
+      },
+      "defaultSize": "16pt (watchOS) / 15sp (Wear OS)",
+      "minimumSize": "13pt (watchOS) / 12sp (Wear OS)",
+      "lineHeight": "1.4",
+      "contrast": "높은 대비 필수 (야외 가독성)",
+      "description": "웨어러블은 작은 화면과 짧은 주목 시간을 고려하여 간결하고 명확한 타이포그래피를 사용합니다."
+    },
+    "vr": {
+      "source": "Meta Quest & Microsoft HoloLens",
+      "font": {
+        "family": "System Default",
+        "unit": "px (at 2m)",
+        "keyFeature": "Depth & Distance Aware"
+      },
+      "typeScale": {
+        "body": "32-36px",
+        "bodyMin": "24px",
+        "headline": "48px",
+        "title": "40px"
+      },
+      "defaultSize": "32px (Meta) / 36px (HoloLens)",
+      "minimumSize": "24px",
+      "lineHeight": "1.5",
+      "contrast": "높은 대비 필수 (3D 공간)",
+      "description": "VR/AR은 2m 거리 기준으로 큰 폰트 크기를 사용하며, 공간감과 거리를 고려한 타이포그래피가 중요합니다."
+    }
+  },
+  "hci_principles": {
+    "line_length": {
+      "rule": "한 줄에 45~75자 사이 유지",
+      "reason": "인지 부하 감소 및 읽기 리듬 최적화",
+      "source": "Dyson, M. C. (2001)"
+    },
+    "x_height": {
+      "rule": "x-height가 큰 폰트 사용",
+      "reason": "동일한 폰트 사이즈에서 더 크게 느껴지고 가독성이 좋음",
+      "source": "Arditi, A., & Crain, T. (2014)"
+    },
+    "contrast": {
+      "rule": "명도 대비 충분히 확보",
+      "reason": "시각적 피로도 감소 및 가독성 향상",
+      "source": "W3C WCAG 2.1"
+    },
+    "font_size_recommendations": {
+      "rule": "플랫폼별 최소 크기 준수",
+      "reason": "각 디바이스의 물리적 특성과 사용 맥락을 고려한 최적 가독성 확보",
+      "platforms": {
+        "mobile": "최소 12pt/sp 이상",
+        "desktop": "최소 12px 이상",
+        "vr": "최소 24px 이상 (2m 거리)"
+      }
+    }
+  },
+  "iri_colors": {
+    "group1": {
+      "keywords": ["귀여운", "경쾌한"],
+      "description": "Soft + Dynamic",
+      "key_colors": ["#FDEEB1", "#F5D1C8", "#B7D683"]
+    },
+    "group2": {
+      "keywords": ["맑은", "온화한", "은은한"],
+      "description": "Soft + Static",
+      "key_colors": ["#D2E3E8", "#ECDBD1", "#D4C8BE"]
+    },
+    "group3": {
+      "keywords": ["고상한", "점잖은"],
+      "description": "Hard + Static",
+      "key_colors": ["#A08C7D", "#584842", "#765F3F"]
+    },
+    "group4": {
+      "keywords": ["다이나믹한", "화려한"],
+      "description": "Hard + Dynamic",
+      "key_colors": ["#C60000", "#00569E", "#FFC300"]
+    },
+    "group5": {
+      "keywords": ["내츄럴한", "우아한", "모던한"],
+      "description": "Neutral",
+      "key_colors": ["#788A67", "#A7AF98", "#404859"]
+    }
+  },
+  "colorblind_info": {
+    "protanomaly_deuteranomaly": {
+      "name": "적록색약",
+      "description": "적색과 녹색 구분이 어려운 가장 흔한 색각 이상 (남성 8%, 여성 0.5%)",
+      "affected_colors": ["빨강-초록", "갈색-녹색", "보라-파랑"],
+      "design_tips": [
+        "빨강-초록 조합 피하기",
+        "명도 대비 충분히 확보",
+        "색상 외 패턴이나 아이콘 활용"
+      ]
+    }
+  }
+}

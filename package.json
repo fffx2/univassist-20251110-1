@@ -1,0 +1,26 @@
+{
+  "name": "typouniverse-project",
+  "version": "1.0.0",
+  "description": "TYPOUNIVERSE - AI Typography Design Guide Platform",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx live-server",
+    "build": "echo 'No build step required'",
+    "test": "echo 'No tests configured'"
+  },
+  "keywords": [
+    "typography",
+    "design",
+    "ai",
+    "ux",
+    "ui"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "openai": "^4.0.0"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}

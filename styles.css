@@ -1,0 +1,1281 @@
+/* ============================================
+   기본 스타일
+============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* 페이지 표시/숨김 */
+.main-page, .lab-page, .report-page {
+    display: none;
+}
+
+.main-page.active, .lab-page.active, .report-page.active {
+    display: block;
+}
+
+.hidden { 
+    display: none !important; 
+}
+
+/* ============================================
+   헤더 네비게이션
+============================================ */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.nav-link {
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    padding-bottom: 4px;
+    border-bottom: 2px solid transparent;
+}
+
+.nav-link:hover { 
+    color: #ff6b6b; 
+}
+
+.nav-link.active {
+    color: #ff6b6b;
+    border-bottom-color: #ff6b6b;
+}
+
+.typouniverse-logo {
+    font-size: 20px;
+    font-weight: 700;
+    color: #6666ff;
+    letter-spacing: 2px;
+}
+
+/* ============================================
+   메인 페이지 레이아웃
+============================================ */
+#main-page .main-content {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 60px;
+    margin-bottom: 60px;
+}
+
+#lab-page .main-content {
+    display: block;
+}
+
+.step-section { 
+    margin-bottom: 50px; 
+}
+
+.step-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ff6b6b;
+    margin-bottom: 8px;
+}
+
+.section-header {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* ============================================
+   드롭다운 메뉴
+============================================ */
+.dropdown-section { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+}
+
+.dropdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dropdown-item:hover { 
+    border-color: #6666ff; 
+}
+
+.dropdown-item.selected { 
+    border-color: #6666ff; 
+    background: #f0f0ff; 
+}
+
+.dropdown-arrow { 
+    color: #6666ff; 
+    font-size: 12px; 
+}
+
+.dropdown-menu {
+    position: absolute;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-top: 5px;
+    z-index: 1000;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.dropdown-menu.show { 
+    display: block; 
+}
+
+.dropdown-option { 
+    padding: 12px 20px; 
+    cursor: pointer; 
+    transition: background 0.2s; 
+}
+
+.dropdown-option:hover { 
+    background: #f0f0ff; 
+}
+
+/* ============================================
+   무드 선택 슬라이더
+============================================ */
+.tone-selector { 
+    background: white; 
+    padding: 30px; 
+    border-radius: 12px; 
+    border: 1px solid #e0e0e0; 
+}
+
+.tone-labels, .tone-bottom-labels { 
+    display: flex; 
+    justify-content: space-between; 
+    font-size: 14px; 
+    font-weight: 600; 
+    color: #333; 
+}
+
+.slider-container { 
+    margin-bottom: 30px; 
+    position: relative; 
+}
+
+.slider {
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: #e0e0e0;
+    -webkit-appearance: none;
+    outline: none;
+    margin: 10px 0;
+}
+
+.slider::-webkit-slider-thumb { 
+    -webkit-appearance: none; 
+    width: 20px; 
+    height: 20px; 
+    border-radius: 50%; 
+    background: #6666ff; 
+    cursor: pointer; 
+    border: 3px solid white; 
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15); 
+}
+
+/* ============================================
+   키워드 태그 및 색상 선택
+============================================ */
+.keyword-tags { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 10px; 
+}
+
+.tag { 
+    padding: 8px 16px; 
+    border-radius: 20px; 
+    font-size: 14px; 
+    font-weight: 500; 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+    border: 2px solid transparent; 
+    background-color: #f0f0f0; 
+    color: #666;
+}
+
+.tag:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+}
+
+.tag.selected { 
+    border-color: #6666ff; 
+    background-color: #6666ff; 
+    color: white; 
+    transform: scale(1.05); 
+}
+
+.color-selection { 
+    display: flex; 
+    gap: 15px; 
+    margin-top: 20px; 
+}
+
+.color-swatch { 
+    width: 60px; 
+    height: 60px; 
+    border-radius: 50%; 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+    border: 3px solid transparent; 
+}
+
+.color-swatch:hover { 
+    transform: scale(1.1); 
+}
+
+.color-swatch.selected { 
+    border-color: #333; 
+    box-shadow: 0 0 0 3px white, 0 0 0 5px #333; 
+}
+
+/* ============================================
+   버튼 스타일
+============================================ */
+.generate-btn { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    gap: 10px; 
+    width: 100%; 
+    padding: 15px; 
+    background: #6666ff; 
+    color: white; 
+    border: none; 
+    border-radius: 8px; 
+    font-size: 16px; 
+    font-weight: 600; 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+    margin-top: 30px; 
+}
+
+.generate-btn:hover { 
+    background: #5555ee; 
+    transform: translateY(-2px); 
+    box-shadow: 0 5px 15px rgba(102,102,255,0.3); 
+}
+
+/* PNG 다운로드 버튼 스타일 */
+.download-report-btn {
+    display: block;
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    margin-top: 20px;
+}
+
+.download-report-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.download-report-btn:active {
+    transform: translateY(-1px);
+}
+
+.download-report-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+.loading { 
+    width: 20px; 
+    height: 20px; 
+    border: 3px solid rgba(255,255,255,0.3); 
+    border-radius: 50%; 
+    border-top-color: #fff; 
+    animation: spin 1s ease-in-out infinite; 
+}
+
+@keyframes spin { 
+    to { transform: rotate(360deg); } 
+}
+
+/* ============================================
+   AI Assistant 결과 표시
+============================================ */
+.guide-description { 
+    margin-bottom: 40px; 
+    font-size: 14px; 
+    color: #666; 
+    line-height: 1.6; 
+    min-height: 60px; 
+}
+
+.subsection-title { 
+    font-size: 16px; 
+    font-weight: 600; 
+    color: #333; 
+    margin-bottom: 20px; 
+}
+
+.color-system-section, .typography-section { 
+    margin-bottom: 40px; 
+}
+
+.color-palette { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 0; 
+    border-radius: 12px; 
+    overflow: hidden; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+}
+
+.color-row { 
+    display: flex; 
+}
+
+.color-box { 
+    flex: 1; 
+    padding: 20px; 
+    font-weight: 500; 
+}
+
+.color-label { 
+    font-size: 14px; 
+    font-weight: 400; 
+    margin-bottom: 5px; 
+    opacity: 0.9; 
+}
+
+.color-code { 
+    font-size: 16px; 
+    font-weight: 600; 
+}
+
+.typography-content { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 30px; 
+}
+
+.font-description, .font-specs { 
+    font-size: 14px; 
+}
+
+.interactive-button { 
+    background: #ff6b6b; 
+    color: white; 
+    padding: 15px 30px; 
+    border: none; 
+    border-radius: 8px; 
+    text-align: center; 
+    font-weight: 600; 
+    font-size: 16px; 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+    display: inline-block; 
+    text-decoration: none; 
+}
+
+.interactive-button:hover { 
+    background: #ff5252; 
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 12px rgba(255,107,107,0.3); 
+}
+
+/* ============================================
+   하단 가이드라인
+============================================ */
+.bottom-guidelines { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 40px; 
+    margin-top: 60px; 
+}
+
+.guideline-item { 
+    background: white; 
+    padding: 30px; 
+    border-radius: 12px; 
+    border: 1px solid #e0e0e0; 
+}
+
+.guideline-title { 
+    font-size: 16px; 
+    font-weight: 600; 
+    color: #6666ff; 
+    margin-bottom: 15px; 
+}
+
+.guideline-text { 
+    font-size: 13px; 
+    color: #666; 
+    line-height: 1.6; 
+}
+
+/* ============================================
+   유니버설 컬러시스템 페이지
+============================================ */
+.contrast-test, .bottom-font-units, .universal-color-system { 
+    background: white; 
+    padding: 30px; 
+    border-radius: 12px; 
+    border: 1px solid #e0e0e0; 
+    margin-bottom: 40px; 
+}
+
+.section-header-lab { 
+    font-size: 20px; 
+    font-weight: 600; 
+    color: #333; 
+    margin-bottom: 30px; 
+}
+
+.color-inputs { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px; 
+    margin-bottom: 30px; 
+}
+
+.input-group { 
+    display: flex; 
+    flex-direction: column; 
+}
+
+.input-group label { 
+    display: block; 
+    font-size: 13px; 
+    color: #666; 
+    margin-bottom: 8px; 
+}
+
+.color-input-wrapper { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    height: 48px; 
+}
+
+.color-input { 
+    flex: 1; 
+    padding: 10px; 
+    border: 1px solid #e0e0e0; 
+    border-radius: 8px; 
+    font-family: inherit; 
+    font-size: 16px; 
+    height: 100%;
+}
+
+.color-picker { 
+    width: 48px; 
+    height: 48px; 
+    border: 1px solid #e0e0e0; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    padding: 4px; 
+}
+
+.contrast-display { 
+    display: flex; 
+    align-items: flex-start; 
+    gap: 30px; 
+    padding: 20px; 
+    background: #f8f8f8; 
+    border-radius: 8px; 
+    margin-bottom: 20px; 
+}
+
+.contrast-ratio-wrapper { 
+    flex-shrink: 0; 
+}
+
+.contrast-ratio { 
+    font-size: 32px; 
+    font-weight: 700; 
+    color: #333; 
+}
+
+.contrast-status-wrapper { 
+    flex: 1; 
+}
+
+.contrast-status { 
+    display: flex; 
+    gap: 10px; 
+    margin-bottom: 10px; 
+}
+
+.contrast-info { 
+    font-size: 12px; 
+    color: #666; 
+    line-height: 1.5; 
+}
+
+.status-badge { 
+    padding: 5px 15px; 
+    border-radius: 20px; 
+    font-size: 12px; 
+    font-weight: 600; 
+    color: white;
+}
+
+.status-badge.pass { 
+    background: #4caf50; 
+}
+
+.status-badge.fail { 
+    background: #f44336; 
+}
+
+.text-preview { 
+    padding: 30px; 
+    border-radius: 8px; 
+    margin-bottom: 20px; 
+    transition: all 0.3s; 
+}
+
+.preview-text-1 { 
+    font-size: 16px; 
+    font-weight: 400; 
+    margin-bottom: 15px; 
+}
+
+.preview-text-2 { 
+    font-size: 18px; 
+    font-weight: 400; 
+    margin-bottom: 15px; 
+}
+
+.preview-text-3 { 
+    font-size: 14px; 
+    font-weight: 700; 
+}
+
+/* ============================================
+   플랫폼별 폰트 단위 (pt 기준)
+============================================ */
+.font-size-input-wrapper { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    margin-bottom: 20px; 
+}
+
+.font-size-input-wrapper input { 
+    width: 80px; 
+    padding: 10px; 
+    border: 1px solid #e0e0e0; 
+    border-radius: 8px; 
+    text-align: center; 
+    font-size: 16px; 
+}
+
+.font-unit-guide { 
+    background: #f0f8ff; 
+    padding: 15px; 
+    border-radius: 8px; 
+    margin-bottom: 20px; 
+    font-size: 13px; 
+    line-height: 1.8; 
+    color: #555; 
+}
+
+.font-unit-cards { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px; 
+}
+
+.font-unit-card { 
+    background: #f8f9fa; 
+    padding: 20px; 
+    border-radius: 8px; 
+    text-align: center; 
+}
+
+.font-unit-card h4 { 
+    font-size: 14px; 
+    font-weight: 600; 
+    color: #6666ff; 
+    margin-bottom: 15px; 
+}
+
+.font-unit-card .font-example { 
+    font-size: 24px; 
+    font-weight: 500; 
+    min-height: 36px; 
+    margin-bottom: 10px; 
+}
+
+.font-unit-desc { 
+    font-size: 11px; 
+    color: #888; 
+    line-height: 1.4; 
+}
+
+/* ============================================
+   색약자 시뮬레이터
+============================================ */
+.simulator-display { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 30px; 
+    margin-bottom: 30px; 
+}
+
+.simulator-card { 
+    background: #f8f9fa; 
+    border-radius: 8px; 
+    padding: 20px; 
+}
+
+.simulator-title { 
+    font-size: 14px; 
+    font-weight: 600; 
+    color: #666; 
+    margin-bottom: 15px; 
+}
+
+.color-palette-sim { 
+    display: flex; 
+    gap: 15px; 
+}
+
+.palette-item { 
+    flex: 1; 
+    height: 100px; 
+    border-radius: 8px; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    font-weight: 500; 
+    transition: background-color 0.3s ease; 
+}
+
+.palette-label { 
+    font-size: 14px; 
+}
+
+.hex-code-sim { 
+    font-size: 11px; 
+    margin-top: 5px; 
+    opacity: 0.8; 
+}
+
+.solutions-section { 
+    background: #f8f9fa; 
+    padding: 25px; 
+    border-radius: 8px; 
+}
+
+.solution-header { 
+    font-size: 18px; 
+    font-weight: 600; 
+    color: #333; 
+    margin-bottom: 20px; 
+}
+
+#solution-text { 
+    font-size: 16px; 
+    line-height: 1.7; 
+}
+
+.contrast-example-box {
+    margin-top: 15px;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.contrast-example-box p {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.contrast-example-box .ratio-display {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.typing-cursor { 
+    font-weight: bold; 
+    color: #888; 
+    animation: blink 0.7s infinite; 
+}
+
+@keyframes blink { 
+    50% { opacity: 0; } 
+}
+
+/* ============================================
+   AI DESIGN REPORT 페이지
+============================================ */
+.report-content {
+    max-width: 100%;
+}
+
+.report-hero {
+    text-align: center;
+    margin-bottom: 60px;
+    padding: 40px 0;
+}
+
+.report-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* NEW: 작은 타이틀 스타일 */
+.report-title-small {
+    font-size: 28px;
+    font-weight: 600;
+    color: #999;
+    margin-bottom: 15px;
+}
+
+.report-subtitle {
+    font-size: 18px;
+    color: #666;
+    font-weight: 400;
+}
+
+.report-loading {
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid #e0e0e0;
+    border-top-color: #6666ff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 30px;
+}
+
+.report-section {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 40px;
+}
+
+.report-section-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Font Pairing (한글 폰트 포함) */
+.font-pairing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.font-card {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.font-preview {
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.font-preview.korean {
+    font-size: 32px;
+}
+
+.font-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #6666ff;
+    margin-bottom: 10px;
+}
+
+.font-usage {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.font-link {
+    display: inline-block;
+    font-size: 14px;
+    color: #6666ff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.font-link:hover {
+    color: #5555ee;
+    transform: translateX(5px);
+}
+
+.ai-reasoning {
+    background: #f0f8ff;
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.ai-reasoning strong {
+    color: #6666ff;
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Typography Report (메인에서 이동) */
+.typography-report-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+/* Color System */
+.color-shades-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.shade-column h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.shade-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-weight: 500;
+    transition: transform 0.2s;
+}
+
+.shade-box:hover {
+    transform: translateX(5px);
+}
+
+.shade-label {
+    font-size: 14px;
+}
+
+.shade-hex {
+    font-size: 12px;
+    opacity: 0.8;
+    font-family: 'Courier New', monospace;
+}
+
+.color-usage-guide {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 8px;
+}
+
+.color-usage-guide h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.color-usage-guide ul {
+    list-style: none;
+}
+
+.color-usage-guide li {
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 14px;
+    color: #666;
+}
+
+.color-usage-guide li:last-child {
+    border-bottom: none;
+}
+
+/* NEW: 유니버설 컬러시스템 최적화 섹션 */
+.universal-recommendation-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+.recommendation-card {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+.recommendation-card h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.optimal-colors {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.optimal-color-box {
+    flex: 1;
+    height: 100px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+}
+
+.optimal-label {
+    font-size: 14px;
+}
+
+.optimal-hex {
+    font-size: 12px;
+    margin-top: 5px;
+    opacity: 0.8;
+    font-family: 'Courier New', monospace;
+}
+
+.optimal-preview {
+    padding: 25px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.optimal-preview p {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.optimal-ratio {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* Component Preview */
+.component-showcase {
+    display: grid;
+    gap: 30px;
+}
+
+.component-item {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 12px;
+}
+
+.component-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.demo-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.demo-btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.demo-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* 카드 그리드 (2단 - 화면 가득 채우기) */
+.demo-card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.demo-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    cursor: pointer;
+    min-height: 220px;
+    width: 100%;
+    /* 모든 속성에 transition 적용 */
+    transition: all 0.3s ease, 
+                background 0.3s ease, 
+                background-color 0.3s ease,
+                border-left-width 0.3s ease,
+                border-left-color 0.3s ease,
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+}
+
+.demo-card h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    transition: color 0.3s ease;
+}
+
+.demo-card p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    transition: color 0.3s ease;
+}
+
+/* 카드 버튼 */
+.demo-card-btn {
+    transition: all 0.3s ease !important;
+}
+
+.demo-card-btn:hover {
+    opacity: 0.9;
+}
+
+/* 카드 호버 기본 효과 */
+.demo-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.demo-navbar {
+    background: white;
+    padding: 20px 30px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 15px;
+}
+
+.demo-navbar-dark {
+    background: #1a1a1a;
+}
+
+.demo-nav-logo {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.demo-nav-links {
+    display: flex;
+    gap: 25px;
+}
+
+.demo-nav-links a {
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.demo-navbar:not(.demo-navbar-dark) .demo-nav-links a:hover {
+    opacity: 0.7;
+}
+
+.demo-navbar-dark .demo-nav-links a:hover {
+    color: #ffffff !important;
+}
+
+/* Code Export */
+.code-export-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.export-tab {
+    padding: 10px 20px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.export-tab.active {
+    background: #6666ff;
+    color: white;
+}
+
+.code-container {
+    position: relative;
+    background: #1e1e1e;
+    border-radius: 12px;
+    padding: 25px;
+}
+
+#code-output {
+    color: #d4d4d4;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-x: auto;
+    white-space: pre;
+    margin: 0;
+}
+
+.copy-code-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 8px 16px;
+    background: #6666ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.copy-code-btn:hover {
+    background: #5555ee;
+}
+
+.copy-code-btn.copied {
+    background: #4caf50;
+}
+
+/* Accessibility Analysis 스타일 삭제됨 */
+
+/* ============================================
+   반응형 디자인 (모바일)
+============================================ */
+@media (max-width: 768px) {
+    #main-page .main-content, 
+    .color-inputs, 
+    .bottom-guidelines, 
+    .font-unit-cards, 
+    .simulator-display,
+    .font-pairing-grid,
+    .color-shades-grid,
+    .universal-recommendation-grid,
+    .demo-card-grid { 
+        grid-template-columns: 1fr; 
+        gap: 20px; 
+    }
+    
+    .header { 
+        flex-direction: column; 
+        gap: 20px; 
+        text-align: center; 
+    }
+    
+    .header-left { 
+        flex-direction: column; 
+        gap: 15px; 
+    }
+    
+    .typography-content,
+    .typography-report-content { 
+        grid-template-columns: 1fr; 
+    }
+    
+    .report-title { 
+        font-size: 32px; 
+    }
+}
