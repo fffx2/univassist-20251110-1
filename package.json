@@ -1,7 +1,9 @@
+
+
 {
-  "name": "typouniverse-project",
+  "name": "UNIVASSIST-project",
   "version": "1.0.0",
-  "description": "TYPOUNIVERSE - AI Typography Design Guide Platform",
+  "description": "UNIVASSIST - AI Typography Design Guide Platform",
   "main": "index.html",
   "scripts": {
     "dev": "npx live-server",
@@ -18,7 +20,8 @@
   "author": "Your Name",
   "license": "MIT",
   "dependencies": {
-    "openai": "^4.0.0"
+    "openai": "^4.20.1",
+    "docx": "^8.5.0"
   },
   "devDependencies": {
     "live-server": "^1.2.2"
