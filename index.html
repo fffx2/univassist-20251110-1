@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TYPOUNIVERSE</title>
+    <title>UNIVASSIST</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
     <link rel="stylesheet" href="./styles.css">
 </head>
@@ -411,9 +411,17 @@
                     <!-- PDF Download -->
                     <section class="report-section">
                         <h2 class="report-section-title">AI 리포트 다운로드</h2>
-                        <button id="download-report-btn" onclick="downloadReportAsPDF()" style="width: 100%; padding: 16px 32px; font-size: 16px; font-weight: 600; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s; margin-top: 10px;">
-                            📑 PDF로 다운로드
-                        </button>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <button id="download-report-btn" onclick="downloadReportAsPDF()" style="flex: 1; padding: 16px 32px; font-size: 16px; font-weight: 600; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s;">
+                                📑 PDF로 다운로드
+                            </button>
+                            <button onclick="downloadReportAsJSON()" style="flex: 1; padding: 16px 32px; font-size: 16px; font-weight: 600; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s;">
+                                💾 JSON으로 다운로드
+                            </button>
+                        </div>
+                        <p style="margin-top: 10px; font-size: 12px; color: #6b7280;">
+                            💡 JSON 파일은 모든 데이터를 편집 가능한 형식으로 저장합니다.
+                        </p>
                     </section>
 
                     <!-- AI Accessibility Analysis 섹션 삭제됨 -->
