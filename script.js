@@ -92,7 +92,7 @@ function initializeMainPage() {
     initializeDropdowns();
     initializeSliders();
     document.getElementById('generate-btn').addEventListener('click', generateGuide);
-    updateAIMessage("안녕하세요! TYPOUNIVERSE AI Design Assistant입니다. 어떤 프로젝트를 위한 디자인 가이드를 찾으시나요?");
+    updateAIMessage("안녕하세요! UNIVASSIT AI Design Assistant입니다. 어떤 프로젝트를 위한 디자인 가이드를 찾으시나요?");
 }
 
 // 드롭다운 메뉴 초기화
@@ -933,158 +933,102 @@ async function downloadReportAsPDF() {
             return;
         }
 
+        const reportContent = document.getElementById('report-content');
+        
+        if (!reportContent || reportContent.style.display === 'none') {
+            alert('리포트가 생성되지 않았습니다.\n"AI 디자인 리포트" 탭으로 이동해주세요.');
+            btn.textContent = originalText;
+            btn.disabled = false;
+            return;
+        }
+
+        // 렌더링 대기
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        // html2canvas로 고해상도 이미지 생성
+        const canvas = await html2canvas(reportContent, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: false,
+            backgroundColor: '#ffffff',
+            logging: false,
+            windowWidth: 1200,
+            width: reportContent.scrollWidth,
+            height: reportContent.scrollHeight
+        });
+
         // jsPDF 객체 생성
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF({
             orientation: 'portrait',
             unit: 'mm',
-            format: 'a4'
+            format: 'a4',
+            compress: true
         });
 
-        // 페이지 설정
-        const margin = 20;
-        let y = margin;
-        const lineHeight = 7;
-
-        // 제목
-        pdf.setFontSize(24);
-        pdf.setFont(undefined, 'bold');
-        pdf.text('AI Design System Report', margin, y);
-        y += 15;
-
-        pdf.setFontSize(10);
-        pdf.setFont(undefined, 'normal');
-        pdf.text(`Generated: ${new Date().toLocaleDateString('ko-KR')}`, margin, y);
-        y += 15;
-
-        // 구분선
-        pdf.setDrawColor(0);
-        pdf.line(margin, y, 190, y);
-        y += 10;
-
-        // === AI 폰트 페어링 ===
-        pdf.setFontSize(16);
-        pdf.setFont(undefined, 'bold');
-        pdf.text('AI Font Pairing', margin, y);
-        y += 10;
-
-        pdf.setFontSize(11);
-        pdf.setFont(undefined, 'normal');
+        // A4 크기 (mm)
+        const pageWidth = 210;
+        const pageHeight = 297;
+        const margin = 10;
         
-        pdf.text(`Heading Font: ${reportData.fonts.heading}`, margin, y);
-        y += lineHeight;
+        // 실제 콘텐츠 영역
+        const contentWidth = pageWidth - (margin * 2);
+        const contentHeight = pageHeight - (margin * 2);
         
-        pdf.text(`Body Font: ${reportData.fonts.body}`, margin, y);
-        y += lineHeight;
+        // 캔버스를 PDF 페이지 너비에 맞춤
+        const imgWidth = contentWidth;
+        const imgHeight = (canvas.height * contentWidth) / canvas.width;
         
-        pdf.text(`Korean Font: ${reportData.fonts.korean}`, margin, y);
-        y += lineHeight + 3;
+        // 페이지별로 분할
+        let yPosition = 0;
+        let pageNumber = 0;
 
-        if (reportData.fonts.reasoning) {
-            pdf.setFontSize(9);
-            const reasonLines = pdf.splitTextToSize(reportData.fonts.reasoning, 170);
-            pdf.text(reasonLines, margin, y);
-            y += reasonLines.length * 5 + 10;
+        while (yPosition < canvas.height) {
+            if (pageNumber > 0) {
+                pdf.addPage();
+            }
+            
+            // 한 페이지에 들어갈 캔버스 픽셀 높이 계산
+            const pixelsPerPage = (canvas.width * contentHeight) / contentWidth;
+            const remainingHeight = canvas.height - yPosition;
+            const heightToCapture = Math.min(pixelsPerPage, remainingHeight);
+            
+            // 새 캔버스 생성하여 해당 부분만 추출
+            const pageCanvas = document.createElement('canvas');
+            pageCanvas.width = canvas.width;
+            pageCanvas.height = heightToCapture;
+            
+            const pageCtx = pageCanvas.getContext('2d');
+            pageCtx.fillStyle = '#ffffff';
+            pageCtx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+            
+            // 원본 캔버스에서 해당 부분 복사
+            pageCtx.drawImage(
+                canvas,
+                0, yPosition,
+                canvas.width, heightToCapture,
+                0, 0,
+                canvas.width, heightToCapture
+            );
+            
+            // 이미지로 변환
+            const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.95);
+            
+            // PDF에 이미지 추가
+            const pageImgHeight = (heightToCapture * contentWidth) / canvas.width;
+            pdf.addImage(pageImgData, 'JPEG', margin, margin, imgWidth, pageImgHeight);
+            
+            yPosition += heightToCapture;
+            pageNumber++;
         }
 
-        // === Primary Colors ===
-        pdf.setFontSize(16);
-        pdf.setFont(undefined, 'bold');
-        pdf.text('Primary Colors', margin, y);
-        y += 10;
+        // 파일명 생성
+        const now = new Date();
+        const dateStr = now.toISOString().split('T')[0];
+        const filename = `UNIVASSIST_Design_Report_${dateStr}.pdf`;
 
-        pdf.setFontSize(9);
-        pdf.setFont(undefined, 'normal');
-        
-        const shades = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'];
-        shades.forEach(shade => {
-            const color = reportData.colors.primary[shade];
-            pdf.text(`${shade}: ${color}`, margin, y);
-            y += 5;
-        });
-        y += 5;
-
-        // === Secondary Colors ===
-        pdf.setFontSize(16);
-        pdf.setFont(undefined, 'bold');
-        pdf.text('Secondary Colors', margin, y);
-        y += 10;
-
-        pdf.setFontSize(9);
-        pdf.setFont(undefined, 'normal');
-        
-        shades.forEach(shade => {
-            const color = reportData.colors.secondary[shade];
-            pdf.text(`${shade}: ${color}`, margin, y);
-            y += 5;
-        });
-        y += 10;
-
-        // === 디자인 가이드 ===
-        if (y > 250) {
-            pdf.addPage();
-            y = margin;
-        }
-
-        pdf.setFontSize(16);
-        pdf.setFont(undefined, 'bold');
-        pdf.text('Design Guidelines', margin, y);
-        y += 10;
-
-        pdf.setFontSize(11);
-        pdf.setFont(undefined, 'normal');
-        
-        pdf.text(`Service: ${reportData.service}`, margin, y);
-        y += lineHeight;
-        
-        pdf.text(`Platform: ${reportData.platform}`, margin, y);
-        y += lineHeight;
-        
-        pdf.text(`Keyword: ${reportData.keyword}`, margin, y);
-        y += lineHeight + 5;
-
-        pdf.setFontSize(9);
-        const guidelines = [
-            'Usage Recommendations:',
-            '- Primary 500: Main buttons, links, emphasis',
-            '- Primary 100-300: Backgrounds, cards',
-            '- Primary 600-900: Hover states, text',
-            '- Secondary: Secondary buttons, accents'
-        ];
-        
-        guidelines.forEach(line => {
-            pdf.text(line, margin, y);
-            y += 5;
-        });
-
-        // === 접근성 ===
-        y += 5;
-        pdf.setFontSize(16);
-        pdf.setFont(undefined, 'bold');
-        pdf.text('Accessibility', margin, y);
-        y += 10;
-
-        pdf.setFontSize(11);
-        pdf.setFont(undefined, 'normal');
-        
-        const primary500 = reportData.colors.primary['500'];
-        const textColor = getContrastingTextColor(primary500);
-        const contrastRatio = calculateContrast(primary500, textColor).toFixed(2);
-
-        pdf.text(`Primary 500: ${primary500}`, margin, y);
-        y += lineHeight;
-        
-        pdf.text(`Text Color: ${textColor}`, margin, y);
-        y += lineHeight;
-        
-        pdf.text(`Contrast Ratio: ${contrastRatio}:1`, margin, y);
-        y += lineHeight;
-        
-        pdf.text(`WCAG AA: ${contrastRatio >= 4.5 ? 'Pass' : 'Fail'}`, margin, y);
-
-        // 파일명 생성 및 저장
-        const dateStr = new Date().toISOString().split('T')[0];
-        pdf.save(`UNIVASSIST_Design_Report_${dateStr}.pdf`);
+        // PDF 저장
+        pdf.save(filename);
 
         btn.textContent = '✅ PDF 다운로드 완료!';
         setTimeout(() => {

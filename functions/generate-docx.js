@@ -31,7 +31,7 @@ exports.handler = async (event) => {
             styles: {
                 default: {
                     document: {
-                        run: { font: "Arial", size: 22 }
+                        run: { font: "맑은 고딕", size: 22 }
                     }
                 },
                 paragraphStyles: [
@@ -39,14 +39,14 @@ exports.handler = async (event) => {
                         id: "Title",
                         name: "Title",
                         basedOn: "Normal",
-                        run: { size: 48, bold: true, color: "000000", font: "Arial" },
+                        run: { size: 48, bold: true, color: "000000", font: "맑은 고딕" },
                         paragraph: { spacing: { before: 240, after: 120 }, alignment: AlignmentType.CENTER }
                     },
                     {
                         id: "Heading1",
                         name: "Heading 1",
                         basedOn: "Normal",
-                        run: { size: 32, bold: true, color: "2563eb", font: "Arial" },
+                        run: { size: 32, bold: true, color: "2563eb", font: "맑은 고딕" },
                         paragraph: { spacing: { before: 360, after: 120 }, numbering: { reference: "heading-numbering", level: 0 } }
                     }
                 ]
