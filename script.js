@@ -311,6 +311,52 @@ function initializeLabPage() {
         updateLab();
     });
 
+    // AI 텍스트 색상 추천 버튼
+    document.getElementById('ai-text-color-btn').addEventListener('click', async () => {
+        const btn = document.getElementById('ai-text-color-btn');
+        const originalText = btn.textContent;
+        
+        try {
+            btn.textContent = '⏳ AI 분석 중...';
+            btn.disabled = true;
+            
+            const bgColor = document.getElementById('bg-color-input').value;
+            console.log('🎨 AI 텍스트 색상 추천 요청 - 배경색:', bgColor);
+            
+            const aiRecommendation = await getAITextColorRecommendation(bgColor);
+            console.log('✅ AI 추천 완료:', aiRecommendation);
+            
+            // 추천된 텍스트 색상 적용
+            document.getElementById('text-color-input').value = aiRecommendation.textColor;
+            document.getElementById('text-color-picker').value = aiRecommendation.textColor;
+            
+            // AI 추천 결과 표시 (헥사코드 명확하게)
+            const aiRecommendationDiv = document.getElementById('ai-recommendation');
+            const aiTextColorCode = document.getElementById('ai-text-color');
+            const aiReasoningSpan = document.getElementById('ai-reasoning');
+            
+            aiTextColorCode.textContent = aiRecommendation.textColor.toUpperCase();
+            aiTextColorCode.style.color = aiRecommendation.textColor;
+            aiReasoningSpan.textContent = aiRecommendation.reasoning || '접근성 기준을 만족하는 색상입니다.';
+            aiRecommendationDiv.style.display = 'block';
+            
+            // 화면 업데이트
+            updateLab();
+            
+            btn.textContent = '✅ 추천 완료!';
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }, 2000);
+            
+        } catch (error) {
+            console.error('❌ AI 텍스트 색상 추천 실패:', error);
+            alert('AI 추천 중 오류가 발생했습니다.\n' + error.message);
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
+    });
+
     updateLab(); // 초기 로딩
 }
 
@@ -538,6 +584,41 @@ async function getAIFontRecommendation(service, keyword, platform, mood) {
     } catch (error) {
         console.error('❌ AI 폰트 추천 실패:', error.message);
         throw error;
+    }
+}
+
+// AI 텍스트 색상 추천 API 호출
+async function getAITextColorRecommendation(backgroundColor) {
+    console.log('🎨 AI 텍스트 색상 추천 API 호출 시작');
+    console.log('배경색:', backgroundColor);
+    
+    try {
+        const response = await fetch('/.netlify/functions/get-text-color-recommendation', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                backgroundColor: backgroundColor
+            })
+        });
+
+        console.log('API 응답 상태:', response.status);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('API 오류 응답:', errorText);
+            throw new Error(`AI 서버 응답 오류 (${response.status})`);
+        }
+
+        const data = await response.json();
+        console.log('✅ AI 텍스트 색상 추천 성공:', data);
+        return data;
+    } catch (error) {
+        console.error('❌ AI 텍스트 색상 추천 실패:', error.message);
+        // 실패 시 기존 방식으로 폴백
+        return {
+            textColor: getContrastingTextColor(backgroundColor),
+            reasoning: '기본 명도 대비 계산을 사용했습니다.'
+        };
     }
 }
 
@@ -967,81 +1048,34 @@ async function downloadReportAsPDF() {
 
         console.log('Canvas size:', canvas.width, 'x', canvas.height);
 
-        // jsPDF 객체 생성
+        // 이미지를 데이터 URL로 변환
+        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+
+        // jsPDF 객체 생성 - 콘텐츠 높이에 맞춘 커스텀 페이지 크기
         const { jsPDF } = window.jspdf;
+        
+        // A4 너비 고정, 높이는 콘텐츠에 맞춤
+        const pageWidth = 210; // A4 너비 (mm)
+        const margin = 5;
+        const contentWidth = pageWidth - (margin * 2); // 200mm
+        
+        // 콘텐츠 비율에 맞춘 페이지 높이 계산
+        const imgHeight = (canvas.height * contentWidth) / canvas.width;
+        const pageHeight = imgHeight + (margin * 2);
+        
+        console.log('PDF size:', pageWidth, 'x', pageHeight, 'mm');
+        
         const pdf = new jsPDF({
             orientation: 'portrait',
             unit: 'mm',
-            format: 'a4',
+            format: [pageWidth, pageHeight],
             compress: true
         });
 
-        // A4 크기 (mm)
-        const pageWidth = 210;
-        const pageHeight = 297;
-        const margin = 5;
-        
-        // 실제 콘텐츠 영역
-        const contentWidth = pageWidth - (margin * 2); // 200mm
-        const contentHeight = pageHeight - (margin * 2); // 287mm
-        
-        // 캔버스를 PDF 페이지 너비에 맞춤
-        const imgWidth = contentWidth;
-        
-        // 페이지별로 분할
-        let yPosition = 0;
-        let pageNumber = 0;
-        const pixelsPerPage = (canvas.width * contentHeight) / contentWidth;
+        // 전체 이미지를 한 페이지에 추가
+        pdf.addImage(imgData, 'JPEG', margin, margin, contentWidth, imgHeight);
 
-        console.log('Pixels per page:', pixelsPerPage);
-
-        while (yPosition < canvas.height) {
-            const remainingHeight = canvas.height - yPosition;
-            const heightToCapture = Math.min(pixelsPerPage, remainingHeight);
-            
-            // 빈 페이지 방지: 남은 높이가 한 페이지의 10% 미만이면 무시
-            const minHeight = pixelsPerPage * 0.1;
-            if (heightToCapture < minHeight) {
-                console.log('Skipping small remaining height:', heightToCapture);
-                break;
-            }
-            
-            if (pageNumber > 0) {
-                pdf.addPage();
-            }
-            
-            // 새 캔버스 생성하여 해당 부분만 추출
-            const pageCanvas = document.createElement('canvas');
-            pageCanvas.width = canvas.width;
-            pageCanvas.height = Math.ceil(heightToCapture);
-            
-            const pageCtx = pageCanvas.getContext('2d');
-            pageCtx.fillStyle = '#ffffff';
-            pageCtx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
-            
-            // 원본 캔버스에서 해당 부분 복사
-            pageCtx.drawImage(
-                canvas,
-                0, yPosition,
-                canvas.width, heightToCapture,
-                0, 0,
-                canvas.width, heightToCapture
-            );
-            
-            // 이미지로 변환
-            const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.95);
-            
-            // PDF에 이미지 추가 (정확한 크기 계산)
-            const pageImgHeight = (heightToCapture * contentWidth) / canvas.width;
-            pdf.addImage(pageImgData, 'JPEG', margin, margin, imgWidth, pageImgHeight);
-            
-            console.log(`Page ${pageNumber + 1}: y=${yPosition}, height=${heightToCapture}, pdfHeight=${pageImgHeight}mm`);
-            
-            yPosition += heightToCapture;
-            pageNumber++;
-        }
-
-        console.log('Total pages:', pageNumber);
+        console.log('Single page PDF created');
 
         // 파일명 생성
         const now = new Date();
